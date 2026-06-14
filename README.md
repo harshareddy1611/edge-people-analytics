@@ -27,11 +27,13 @@ over time.
   an hourly activity heatmap, and demographic breakdowns.
 - **Ad viewer** (`:5001`, optional) — fullscreen slideshow that displays
   category-targeted content (e.g. gym / beauty / finance ads) based on
-  the dominant demographic detected recently.
+  the dominant demographic detected recently. Drop images into
+  `adviewer/ads/<category>/` and it slideshows through them, switching
+  category automatically as the detected audience changes.
 
-| Day view | Week view | Ad viewer |
-|---|---|---|
-| ![day](docs/screenshots/dashboard-day.png) | ![week](docs/screenshots/dashboard-week.png) | ![ad viewer](docs/screenshots/adviewer-demo.gif) |
+| Day view | Week view |
+|---|---|
+| ![day](docs/screenshots/dashboard-day.png) | ![week](docs/screenshots/dashboard-week.png) |
 
 ## Architecture
 
