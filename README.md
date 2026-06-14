@@ -197,7 +197,6 @@ JetPack/Python 3.6 setup — hopefully useful if you hit the same walls:
 ## Contributing
 
 Issues and PRs welcome — particularly around:
-- Generalizing the hardcoded paths (see above)
 - TensorRT conversion for the face/age/gender models
 - A line-crossing in/out counter for directional foot traffic
 - Better tracking (ByteTrack/OC-SORT) for crowded scenes
