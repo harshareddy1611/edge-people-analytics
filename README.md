@@ -1,4 +1,4 @@
-# People Analytics — Jetson Nano
+# Edge People Analytics
 
 A real-time people-counting and demographic analytics system for the
 **Jetson Nano (4GB)**, built around two CSI cameras. It runs entirely
@@ -98,11 +98,15 @@ calibration/— camera calibration utilities
 
 ## Setup
 
-1. Clone this repo to `~/projects/people-analytics` on the Jetson.
-   (If you use a different path or username, update the
-   `sys.path.insert(...)` calls at the top of each entry-point script
-   and the paths in `shared/config.py` — see the
-   [configuration paths](#configuration) note below.)
+1. Clone this repo to `~/projects/people-analytics` on the Jetson
+   (the directory name `people-analytics` is what the hardcoded paths
+   in `shared/config.py` expect — see
+   [Hardcoded paths](#hardcoded-paths) below if you use a different
+   path or username):
+   ```bash
+   git clone https://github.com/harshareddy1611/edge-people-analytics.git \
+     ~/projects/people-analytics
+   ```
 
 2. Download the model weights — these are excluded from the repo (large
    binaries). See [MODELS.md](MODELS.md) for what's needed and where to
