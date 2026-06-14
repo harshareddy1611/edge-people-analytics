@@ -1,0 +1,31 @@
+# --- Runtime data ---
+data/
+logs/
+*.db
+*.db-journal
+*.db-wal
+
+# --- Python ---
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.venv/
+venv/
+
+# --- Model weights (large binaries — see MODELS.md for download links) ---
+face/models/*.caffemodel
+*.pt
+*.onnx
+*.engine
+
+# --- Ad media (user-provided content, not source) ---
+adviewer/ads/*/
+!adviewer/ads/*/.gitkeep
+!adviewer/ads/README.md
+
+# --- OS / editor cruft ---
+.DS_Store
+*.swp
+.vscode/
+.idea/
