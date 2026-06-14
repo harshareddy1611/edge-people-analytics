@@ -15,11 +15,13 @@ over time.
 
 ## What it does
 
-- **Wide-angle camera** — detects and tracks people (YOLOv5n), counts
-  foot traffic, logs unique visitors and dwell time.
-- **Narrow-angle camera** — estimates age/gender, detects whether
-  someone is looking at the camera (eye-cascade based "attention"
-  signal), and tracks per-person attentive time.
+- **Scene camera** (IMX219, 200° wide-angle lens) — detects and tracks
+  people (YOLOv5n), counts foot traffic, logs unique visitors and dwell
+  time.
+- **Face camera** (IMX219, standard Pi Camera Module 2 lens) — estimates
+  age/gender, detects whether someone is looking at the camera
+  (eye-cascade based "attention" signal), and tracks per-person
+  attentive time.
 - **Dashboard** (`:5000`) — day / week / month historical views: average
   occupancy, unique visitors, peak counts, dwell time, attention ratio,
   an hourly activity heatmap, and demographic breakdowns.
@@ -29,32 +31,11 @@ over time.
 
 | Day view | Week view | Ad viewer |
 |---|---|---|
-| ![day](docs/screenshots/dashboard-day.png) | ![week](docs/screenshots/dashboard-week.png) | ![ad viewer](docs/screenshots/adviewer.png) |
+| ![day](docs/screenshots/dashboard-day.png) | ![week](docs/screenshots/dashboard-week.png) | ![ad viewer](docs/screenshots/adviewer-demo.gif) |
 
 ## Architecture
 
-```
-                    ┌─────────────────┐         ┌──────────────────┐
-  Wide-angle CSI ──▶│  scene/detector  │         │  face/analytics   │◀── Narrow-angle CSI
-                    │  YOLOv5n + IoU   │         │  face detect +    │
-                    │  centroid tracker│         │  age/gender +     │
-                    │  dwell, traffic  │         │  eye-cascade      │
-                    └────────┬─────────┘         │  attention,       │
-                             │                    │  dwell, ad logic  │
-                             ▼                    └─────────┬─────────┘
-                    ┌──────────────────────────────────────▼─────────┐
-                    │            shared/database.py (SQLite)         │
-                    │  person_counts · tracking_events · face_events │
-                    │  dwell_events · ad_selections                  │
-                    └───────────────┬─────────────────┬──────────────┘
-                                     │                  │
-                                     ▼                  ▼
-                       ┌─────────────────────┐  ┌────────────────────┐
-                       │ dashboard/app.py     │  │ adviewer/app.py    │
-                       │ Flask, port 5000     │  │ Flask, port 5001   │
-                       │ historical analytics │  │ fullscreen slideshow│
-                       └─────────────────────┘  └────────────────────┘
-```
+![Architecture diagram](docs/screenshots/architecture.jpg)
 
 Each component is an independent process (`run_all.sh` launches all of
 them); the only shared state is the SQLite database.
@@ -62,8 +43,9 @@ them); the only shared state is the SQLite database.
 ## Hardware
 
 - Jetson Nano, 4GB
-- Two CSI cameras (e.g. Raspberry Pi Camera Module 2 / IMX219), one on
-  each CSI port — one wide-angle for the scene, one regular for faces
+- Two IMX219 CSI cameras, one on each CSI port:
+  - **CSI0** — IMX219 with a 200° wide-angle lens (scene/traffic camera)
+  - **CSI1** — IMX219, standard Raspberry Pi Camera Module 2 lens (face camera)
 - A display is **not** required for normal operation (everything is
   accessed via the web dashboard); only needed if you enable
   `DEBUG_DRAW` for live preview windows
@@ -88,8 +70,8 @@ them); the only shared state is the SQLite database.
 ## Project layout
 
 ```
-scene/      — wide-angle camera: YOLOv5n person detection + tracking
-face/       — narrow-angle camera: face detection, age/gender, attention
+scene/      — scene camera (IMX219, 200° wide-angle): YOLOv5n person detection + tracking
+face/       — face camera (IMX219, standard lens): face detection, age/gender, attention
 shared/     — config, SQLite schema and query helpers
 dashboard/  — Flask web dashboard (historical analytics)
 adviewer/   — Flask fullscreen ad slideshow viewer
